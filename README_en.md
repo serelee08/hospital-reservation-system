@@ -4,7 +4,7 @@ A hospital appointment management system built with Spring Boot + MyBatis + MySQ
 
 Provides RESTful APIs across 5 domains: department, patient, doctor, appointment, and medical record.
 
-> 🌐 **[한국어](./README.ko.md)** | **[English](./README.md)**
+> 🌐 **[한국어](./README.md)** | **[English](./README_en.md)**
 
 ---
 
