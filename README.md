@@ -4,7 +4,7 @@ Spring Boot + MyBatis + MySQL + AI 기반 병원 예약 관리 시스템
 
 진료과 · 환자 · 의사 · 예약 · 진료기록 5개 도메인의 RESTful API를 제공합니다.
 
-> 🌐 **[한국어](./README.ko.md)** | **[English](./README.md)**
+> 🌐 **[한국어](./README.md)** | **[English](./README_en.md)**
 
 ---
 
