@@ -18,7 +18,7 @@ Spring Boot + MyBatis + MySQL AI 기반 병원 예약 관리 시스템
 | 개발 인원 | 1명 (개인 프로젝트) |
 | 핵심 목표 | FK 관계 기반 정규화 설계 + 계층형 아키텍처 REST API + React 연동 |
 
-📄 **[전체 API 명세 보기 → API.md](./API.md)**
+📄 **[전체 API 명세 보기 → API.md](./api.md)**
 
 ---
 
@@ -94,7 +94,7 @@ Spring Boot + MyBatis + MySQL AI 기반 병원 예약 관리 시스템
 
 ## 🗄 데이터베이스 설계 (ERD)
 
-![ERD](./erd.png)
+![ERD](./images/erd.png)
 
 ```
 department (진료과)
@@ -199,10 +199,10 @@ npm run dev
 
 ---
 
-## 🚀 향후 계획
+## 🚀 진행 사항
 
-- [x] 백엔드 5개 도메인 CRUD + REST API
-- [x] React 프론트엔드 초기 연동 (진료과/의사 목록)
+- [v] 백엔드 5개 도메인 CRUD + REST API
+- [v] React 프론트엔드 초기 연동 (진료과/의사 목록)
 - [ ] 예약 폼 / 예약 조회 화면
 - [ ] 예외 처리 고도화 (404, 400 상태코드)
 - [ ] JOIN 쿼리로 예약 조회 시 환자명·의사명 함께 반환
