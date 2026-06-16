@@ -1,6 +1,6 @@
 # 🏥 Hospital Reservation System
 
-Spring Boot + MyBatis + MySQL + AI 기반 병원 예약 관리 시스템
+Spring Boot + MyBatis + MySQL AI 기반 병원 예약 관리 시스템 
 
 진료과 · 환자 · 의사 · 예약 · 진료기록 5개 도메인의 RESTful API를 제공합니다.
 
@@ -10,33 +10,85 @@ Spring Boot + MyBatis + MySQL + AI 기반 병원 예약 관리 시스템
 
 ## 📌 프로젝트 개요
 
-병원 예약 업무를 모델링한 백엔드 시스템입니다. 환자가 의사에게 예약을 잡고, 진료 후 진료기록이 남는 실제 병원 워크플로우를 데이터베이스 설계와 REST API로 구현했습니다.
+병원 예약 업무를 모델링한 풀스택 시스템입니다. 환자가 의사에게 예약을 잡고, 진료 후 진료기록이 남는 실제 병원 워크플로우를 데이터베이스 설계와 REST API로 구현했으며, React 프론트엔드와 AI 기능까지 확장하는 것을 목표로 합니다.
 
 | 항목 | 내용 |
 |------|------|
 | 개발 기간 | 2026.06 ~ (진행 중) |
 | 개발 인원 | 1명 (개인 프로젝트) |
-| 핵심 목표 | FK 관계 기반 정규화 설계 + 계층형 아키텍처 REST API |
+| 핵심 목표 | FK 관계 기반 정규화 설계 + 계층형 아키텍처 REST API + React 연동 |
+
+📄 **[전체 API 명세 보기 → API.md](./API.md)**
 
 ---
 
 ## 🛠 기술 스택
 
 **Backend**
-- Java 21
-- Spring Boot 3.5
-- MyBatis 3.0
-- Spring Web (REST API)
+- Java 21 · Spring Boot 3.5 · MyBatis 3.0 · Spring Web (REST API)
+
+**Frontend**
+- React (Vite) · JavaScript (ES6+)
 
 **Database**
-- MySQL / MariaDB
-- 5개 테이블 정규화 설계 (FK 관계)
+- MySQL / MariaDB · 5개 테이블 정규화 설계 (FK 관계)
+
+**Planned (AI / 확장 예정)**
+- Python Django (AI 챗봇 서버) · Google Gemini API · LSTM/NLP (감성 분석) · 카카오맵 API
 
 **Tools**
-- Maven
-- Postman (API 테스트)
-- Git / GitHub
-- Eclipse
+- Maven · Postman · Git / GitHub · Eclipse / VS Code
+
+---
+
+## 🗺 시스템 아키텍처
+
+(■ 구현 완료 / □ 구현 예정)
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                         사용자 (브라우저)                      │
+└─────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────┐
+│  ■ React Frontend (Vite, :5173)                              │
+│     - 진료과/의사 목록, 예약 폼, 예약 조회                     │
+│     □ 카카오맵 (병원 위치)   □ 챗봇 UI                         │
+└─────────────────────────────────────────────────────────────┘
+                              │  REST API (CORS)
+                              ▼
+┌─────────────────────────────────────────────────────────────┐
+│  ■ Spring Boot Backend (:8080)                               │
+│     Controller → Service → DAO → MyBatis Mapper              │
+└─────────────────────────────────────────────────────────────┘
+                              │  JDBC
+                              ▼
+┌─────────────────────────────────────────────────────────────┐
+│  ■ MySQL / MariaDB (:3306)                                   │
+│     department · patient · doctor · appointment · medical_record │
+└─────────────────────────────────────────────────────────────┘
+
+         □ Django AI Server (예정) - Gemini 챗봇 / LSTM 감성 분석
+```
+
+---
+
+## 🖥 화면 흐름 설계
+
+(■ 구현 완료 / □ 구현 예정)
+
+```
+■ 메인 페이지 (진료과·의사 목록, □지도, [예약하기])
+        ↓
+□ 예약 페이지 (환자 정보 → 진료과 → 의사 → 날짜 선택)
+        ↓
+□ 예약 조회 페이지 (내 예약 목록)
+        ↓
+□ 리뷰 페이지 (후기 작성 + LSTM 감성 분석)
+
+□ 챗봇 (전 페이지 우측 하단, Gemini 예약 문의 자동 응답)
+```
 
 ---
 
@@ -65,64 +117,11 @@ patient (환자)
 - 모든 테이블에 `AUTO_INCREMENT` PK 적용
 - `created_at`에 `DEFAULT NOW()`로 생성 시각 자동 기록
 - `member_id`에 `UNIQUE` 제약으로 중복 가입 방지
-- 진료기록은 예약과 독립적으로 보존 (법적 보관 요건 고려한 비정규화)
+- 진료기록은 예약과 독립적으로 보존 (법적 보관 요건 고려)
 
 ---
 
-## 🔗 API 명세
-
-### Department (진료과)
-| Method | Endpoint | 설명 |
-|--------|----------|------|
-| GET | `/api/departments` | 전체 조회 |
-| GET | `/api/departments/{no}` | 단건 조회 |
-| POST | `/api/departments` | 등록 |
-| PUT | `/api/departments/{no}` | 수정 |
-| DELETE | `/api/departments/{no}` | 삭제 |
-
-### Patient (환자)
-| Method | Endpoint | 설명 |
-|--------|----------|------|
-| GET | `/api/patients` | 전체 조회 |
-| GET | `/api/patients/{no}` | 단건 조회 |
-| POST | `/api/patients` | 등록 |
-| PUT | `/api/patients/{no}` | 수정 |
-| DELETE | `/api/patients/{no}` | 삭제 |
-
-### Doctor (의사)
-| Method | Endpoint | 설명 |
-|--------|----------|------|
-| GET | `/api/doctors` | 전체 조회 |
-| GET | `/api/doctors/{no}` | 단건 조회 |
-| GET | `/api/doctors/department/{departmentNo}` | 진료과별 조회 |
-| POST | `/api/doctors` | 등록 |
-| PUT | `/api/doctors/{no}` | 수정 |
-| DELETE | `/api/doctors/{no}` | 삭제 |
-
-### Appointment (예약)
-| Method | Endpoint | 설명 |
-|--------|----------|------|
-| GET | `/api/appointments` | 전체 조회 |
-| GET | `/api/appointments/{no}` | 단건 조회 |
-| GET | `/api/appointments/patient/{patientNo}` | 환자별 예약 조회 |
-| GET | `/api/appointments/doctor/{doctorNo}` | 의사별 예약 조회 |
-| POST | `/api/appointments` | 예약 등록 |
-| PATCH | `/api/appointments/{no}/status` | 예약 상태 변경 |
-| DELETE | `/api/appointments/{no}` | 예약 취소 |
-
-### Medical Record (진료기록)
-| Method | Endpoint | 설명 |
-|--------|----------|------|
-| GET | `/api/medical-records` | 전체 조회 |
-| GET | `/api/medical-records/{no}` | 단건 조회 |
-| GET | `/api/medical-records/patient/{patientNo}` | 환자별 진료기록 |
-| POST | `/api/medical-records` | 등록 |
-| PUT | `/api/medical-records/{no}` | 수정 |
-| DELETE | `/api/medical-records/{no}` | 삭제 |
-
----
-
-## 🏗 아키텍처
+## 🏗 백엔드 아키텍처
 
 ```
 Controller  →  Service  →  DAO  →  MyBatis Mapper (XML)  →  MySQL
@@ -141,7 +140,8 @@ com.hospital.reservation
 ├── controller   # REST 컨트롤러
 ├── service      # 비즈니스 로직
 ├── dao          # MyBatis 매퍼 인터페이스
-└── vo           # 테이블 매핑 객체
+├── vo           # 테이블 매핑 객체
+└── config       # CORS 등 설정
 
 src/main/resources/mapper/   # SQL XML
 ```
@@ -163,12 +163,19 @@ spring.datasource.password=your_password
 mybatis.configuration.map-underscore-to-camel-case=true
 ```
 
-**3. 실행**
+**3. 백엔드 실행**
 ```bash
 ./mvnw spring-boot:run
 ```
+서버: `http://localhost:8080`
 
-서버는 `http://localhost:8080`에서 실행됩니다.
+**4. 프론트엔드 실행**
+```bash
+cd hospital-reservation-frontend
+npm install
+npm run dev
+```
+프론트엔드: `http://localhost:5173`
 
 ---
 
@@ -179,23 +186,30 @@ mybatis.configuration.map-underscore-to-camel-case=true
 - 해결: `map-underscore-to-camel-case=true` 설정
 
 **2. FK 제약조건 위반**
-- 문제: 부모 테이블에 없는 값을 자식 테이블이 참조하여 INSERT 실패
+- 문제: 부모 테이블에 없는 값을 자식이 참조하여 INSERT 실패
 - 해결: INSERT 순서 준수 (department → patient → doctor → appointment → medical_record)
 
 **3. MariaDB / MySQL 드라이버 호환**
 - 문제: 드라이버와 URL 프로토콜 불일치
 - 해결: 드라이버와 `jdbc:mysql://` URL 프로토콜 일치
 
+**4. CORS 정책 (React 연동)**
+- 문제: React(:5173)에서 Spring Boot(:8080) 호출 시 CORS 차단
+- 해결: `CorsConfig`에서 `/api/**` 경로에 5173 origin 허용
+
 ---
 
-## 🚀 향후 계획 (진행 예정)
+## 🚀 향후 계획
 
-- [ ] React 기반 프론트엔드 (예약 화면 UI)
-- [ ] 예외 처리 고도화 (404, 400 등 상태코드 응답)
+- [x] 백엔드 5개 도메인 CRUD + REST API
+- [x] React 프론트엔드 초기 연동 (진료과/의사 목록)
+- [ ] 예약 폼 / 예약 조회 화면
+- [ ] 예외 처리 고도화 (404, 400 상태코드)
 - [ ] JOIN 쿼리로 예약 조회 시 환자명·의사명 함께 반환
-- [ ] Python Django 기반 AI 챗봇 (예약 문의 자동 응답)
+- [ ] 카카오맵 API 병원 위치 표시
+- [ ] Django 기반 AI 챗봇 (Gemini)
 - [ ] 진료 후기 감성 분석 (LSTM/NLP)
-- [ ] AWS 또는 Render 클라우드 배포
+- [ ] AWS / Render 클라우드 배포
 
 ---
 
